@@ -60,9 +60,8 @@ updateUser = async(req, res) => {
 
 deleteUser = async(req, res) => {
     try {
-        const user = req.user
-        user.delete()
-        res.send(user)
+        await req.user.remove()
+        res.send(req.user)
     } catch (e) {
         res.status(500).send()
     }
