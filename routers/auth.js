@@ -13,10 +13,5 @@ router
     .post(loginUser)
 
 router.route('/logout').post(auth, signOutUser)
-    // router
-    //     .route('/tasks/:id')
-    //     .get(getTask)
-    //     .patch(updateTask)
-    //     .delete(deleteTask)
 
 module.exports = router

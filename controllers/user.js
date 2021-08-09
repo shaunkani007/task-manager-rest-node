@@ -2,13 +2,8 @@ const express = require('express')
 const User = require('../models/User')
 
 getUser = async(req, res) => {
-    const _id = req.params.id
-
     try {
-        const user = await User.findById(_id)
-        if (!user) {
-            return res.status(404).send()
-        }
+        const user = req.user
         res.send(user)
     } catch (e) {
         res.status(500).send()
@@ -51,12 +46,7 @@ updateUser = async(req, res) => {
     }
 
     try {
-        // const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-        //     new: true,
-        //     runValidators: true
-        // })
-
-        const user = await User.findById(req.params.id)
+        const user = req.user
         updates.forEach(update => (user[update] = req.body[update]))
         await user.save()
         if (!user) {
@@ -70,12 +60,8 @@ updateUser = async(req, res) => {
 
 deleteUser = async(req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id)
-
-        if (!user) {
-            return res.status(404).send()
-        }
-
+        const user = req.user
+        user.delete()
         res.send(user)
     } catch (e) {
         res.status(500).send()

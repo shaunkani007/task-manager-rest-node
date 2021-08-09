@@ -10,14 +10,12 @@ const {
 const { auth } = require('../middlewares/auth')
 const router = new express.Router()
 
-router
-    .route('/')
-    .get(auth, getAllUsers)
-    .post(createNewUser)
+router.get('/all', auth, getAllUsers)
 
 router
-    .route('/:id')
+    .route('/')
     .get(auth, getUser)
+    .post(createNewUser)
     .patch(auth, updateUser)
     .delete(auth, deleteUser)
 
