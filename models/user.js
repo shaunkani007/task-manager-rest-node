@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const validator = require('validator')
+const Task = require('./Task')
 var jwt = require('jsonwebtoken')
 
 const userSchema = mongoose.Schema({
@@ -48,6 +49,13 @@ const userSchema = mongoose.Schema({
     }]
 })
 
+//  To use this, add user.populuate('tasks').execPopulate(), then use user.tasks property
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 // This method does not send password and tokens fields when we call res.send(user)
 userSchema.methods.toJSON = function() {
     const obj = this.toObject()
@@ -82,6 +90,11 @@ userSchema.pre('save', async function(next) {
     next()
 })
 
+// Remove evry task of deleted user
+userSchema.pre('remove', async function(next) {
+    await Task.deleteMany({ owner: this._id })
+    next()
+})
 const User = mongoose.model('User', userSchema)
 
 module.exports = User

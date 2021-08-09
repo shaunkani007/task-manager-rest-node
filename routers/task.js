@@ -1,5 +1,5 @@
 const express = require('express')
-const Task = require('../models/Task')
+const { auth } = require('../middlewares/auth')
 const {
     getTask,
     getAllTasks,
@@ -11,13 +11,13 @@ const router = new express.Router()
 
 router
     .route('/')
-    .get(getAllTasks)
-    .post(createNewTask)
+    .get(auth, getAllTasks)
+    .post(auth, createNewTask)
 
 router
     .route('/:id')
-    .get(getTask)
-    .patch(updateTask)
-    .delete(deleteTask)
+    .get(auth, getTask)
+    .patch(auth, updateTask)
+    .delete(auth, deleteTask)
 
 module.exports = router
