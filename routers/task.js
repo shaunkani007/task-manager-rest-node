@@ -10,12 +10,12 @@ const {
 const router = new express.Router()
 
 router
-    .route('/tasks')
+    .route('/')
     .get(getAllTasks)
     .post(createNewTask)
 
 router
-    .route('/tasks/:id')
+    .route('/:id')
     .get(getTask)
     .patch(updateTask)
     .delete(deleteTask)
