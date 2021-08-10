@@ -17,9 +17,34 @@ getTask = async(req, res) => {
     }
 }
 
+// ?completed=true&limit=2&skip=4&sortBy=createdAt:desc - query string
 getAllTasks = async(req, res) => {
+    const match = {}
+    const sort = {}
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true'
+    }
+    if (req.query.sortBy) {
+        const keyValue = req.query.sort.split(':')
+        sort[keyValue[0]] = keyValue[1] === 'desc' ? -1 : 1
+    }
     try {
-        req.user.populuate('tasks').execPopulate()
+        // Filtering data from querystring
+        req.user
+            .populuate({
+                path: 'tasks',
+                match,
+                options: {
+                    limit: parseInt(req.query.limit),
+                    skip: parseInt(req.query.skip),
+                    // sort: {
+                    //     // createdAt: -1 // descending, if ascending put it 1
+                    //     completed: 1
+                    // }
+                    sort
+                }
+            })
+            .execPopulate()
         res.send(req.user.tasks)
     } catch (e) {
         res.status(500).send()

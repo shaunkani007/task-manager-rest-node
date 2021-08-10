@@ -47,6 +47,8 @@ const userSchema = mongoose.Schema({
             required: true
         }
     }]
+}, {
+    timestamps: true
 })
 
 //  To use this, add user.populuate('tasks').execPopulate(), then use user.tasks property
